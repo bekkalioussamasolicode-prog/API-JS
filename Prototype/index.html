@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>World Country Catalog</title>
+    <style>
+      body {
+        background-color: antiquewhite;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        text-align: center;
+        margin-top: 20px;
+        color: darkblue;
+      }
+      #Catalog {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        padding: 20px;
+      }
+
+      .card {
+        background-color: aqua;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .card img {
+        width: 120px;
+        border-radius: 5px;
+      }
+      .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+      }
+      label,
+      select {
+        font-size: 16px;
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>World Country Catalog</h1>
+    <label for="sort">FILTER BY CONTINENT : </label>
+    <select name="continent" id="sort">
+      <option value="All">All</option>
+      <option value="Africa">Africa</option>
+      <option value="Europe">Europe</option>
+      <option value="Asia">Asia</option>
+      <option value="North America">North America</option>
+      <option value="South America">South America</option>
+      <option value="Oceania">Oceania</option>
+    </select>
+    <div id="Catalog"></div>
+    <script src="catalogue.js"></script>
+  </body>
+</html>

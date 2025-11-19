@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Country Details</title>
+    <style>
+      body {
+        background-color: antiquewhite;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 20px;
+      }
+      h1 {
+        color: darkblue;
+      }
+      img {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      p {
+        font-size: 18px;
+        margin: 5px 0;
+      }
+      button {
+        margin-top: 20px;
+        padding: 10px 15px;
+        font-size: 16px;
+        background-color: darkblue;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: navy;
+        opacity: 0.5;
+      }
+      #countryDetails {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: aqua;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="countryDetails"></div>
+    <script>
+      const url = "https://countries-api-hsak.onrender.com/api/countries";
+      let countries = [];
+      const container = document.getElementById("countryDetails");
+      container.innerHTML = "<p>Loading country details...</p>";
+      const params = new URLSearchParams(window.location.search);
+      const countryId = Number(params.get("id"));
+
+      async function getContent() {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+
+          countries = data;
+          console.log(countries);
+          creatDiv();
+        } catch (error) {
+          console.error("Error loading countries:", error);
+        }
+      }
+      getContent();
+
+      function creatDiv() {
+        const country = countries.find((c) => c.id === countryId);
+        if (country) {
+          container.innerHTML = `
+            <h1>${country.name}</h1>
+            <img src="${country.flag}" alt="Flag of ${
+            country.name
+          }" width="200"/>
+            <p> <strong>Capital:</strong> ${country.capital}</p>
+            <p> <strong>Continent:</strong> ${country.continent}</p>
+            <p> <strong>Population:</strong> ${country.population.toLocaleString()}</p>
+            <p> <strong>Area:</strong> ${country.area.toLocaleString()} km²</p>
+            <p> <strong>Language:</strong> ${country.language}</p>
+            <p> <strong>Currency:</strong> ${country.currency}</p>
+            <p> <strong>Timezone:</strong> ${country.timezone}</p>
+
+          `;
+
+          const backBtn = document.createElement("button");
+          backBtn.textContent = "Back to Catalog";
+          backBtn.onclick = () => {
+            window.history.back();
+          };
+          container.appendChild(backBtn);
+        } else {
+          container.innerHTML = "<h1>Country not found</h1>";
+        }
+      }
+    </script>
+  </body>
+</html>
