@@ -8,6 +8,9 @@
       body {
         background-color: antiquewhite;
         font-family: Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
       }
       h1 {
         text-align: center;
@@ -27,14 +30,16 @@
         border-radius: 10px;
         text-align: center;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+        cursor: pointer;
       }
       .card img {
         width: 120px;
         border-radius: 5px;
+        margin-bottom: 10px;
       }
       .card:hover {
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
       }
       label,
       select {
@@ -42,10 +47,32 @@
         margin: 20px;
         cursor: pointer;
       }
+      #search {
+        padding: 8px;
+        font-size: 16px;
+        width: 200px;
+        margin: 20px;
+      }
+      #status {
+        text-align: center;
+        font-size: 18px;
+        margin: 10px;
+        color: darkred;
+      }
+      #status span {
+        font-weight: bold;
+        margin: 0 10px;
+      }
     </style>
   </head>
   <body>
     <h1>World Country Catalog</h1>
+    <div id="status"></div>
+
+    <label for="search">SEARCH FOR COUNTRIES BY NAME :</label>
+
+    <input type="text" id="search" placeholder="Search countries..." />
+
     <label for="sort">FILTER BY CONTINENT : </label>
     <select name="continent" id="sort">
       <option value="All">All</option>
