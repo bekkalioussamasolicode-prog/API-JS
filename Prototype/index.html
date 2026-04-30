@@ -4,86 +4,430 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>World Country Catalog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background-color: antiquewhite;
-        font-family: Arial, sans-serif;
-        padding: 0;
+      :root {
+        --bg-dark: #0d0f1a;
+        --bg-card: rgba(255, 255, 255, 0.05);
+        --bg-card-hover: rgba(255, 255, 255, 0.1);
+        --accent: #6c63ff;
+        --accent-2: #48cfad;
+        --text-primary: #f0f0f8;
+        --text-secondary: #9a9ab0;
+        --border: rgba(255, 255, 255, 0.1);
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        --radius: 16px;
+      }
+
+      * {
         margin: 0;
+        padding: 0;
         box-sizing: border-box;
       }
-      h1 {
-        text-align: center;
-        margin-top: 20px;
-        color: darkblue;
+
+      body {
+        background-color: var(--bg-dark);
+        background-image:
+          radial-gradient(ellipse at 20% 10%, rgba(108, 99, 255, 0.15) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 90%, rgba(72, 207, 173, 0.1) 0%, transparent 50%);
+        font-family: 'Inter', sans-serif;
+        color: var(--text-primary);
+        min-height: 100vh;
       }
+
+      /* ── Header ── */
+      header {
+        text-align: center;
+        padding: 60px 20px 30px;
+      }
+
+      header .badge {
+        display: inline-block;
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        padding: 4px 14px;
+        border-radius: 50px;
+        margin-bottom: 16px;
+      }
+
+      header h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 700;
+        background: linear-gradient(135deg, #fff 40%, var(--accent-2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+      }
+
+      header p.subtitle {
+        color: var(--text-secondary);
+        margin-top: 12px;
+        font-size: 1rem;
+        font-weight: 300;
+      }
+
+      /* ── Stats Bar ── */
+      #status {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        padding: 10px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      #status span {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        padding: 5px 16px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        backdrop-filter: blur(10px);
+        transition: color 0.3s;
+      }
+
+      #status span strong {
+        color: var(--accent-2);
+      }
+
+      /* ── Controls ── */
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 14px;
+        max-width: 1200px;
+        margin: 20px auto;
+        padding: 0 20px;
+      }
+
+      .search-wrapper {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
+        max-width: 380px;
+      }
+
+      .search-wrapper svg {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-secondary);
+        pointer-events: none;
+      }
+
+      #search {
+        width: 100%;
+        padding: 12px 16px 12px 44px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        color: var(--text-primary);
+        outline: none;
+        backdrop-filter: blur(10px);
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      #search::placeholder {
+        color: var(--text-secondary);
+      }
+
+      #search:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+      }
+
+      .select-wrapper {
+        position: relative;
+      }
+
+      .select-wrapper svg {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: var(--text-secondary);
+      }
+
+      #sort {
+        appearance: none;
+        padding: 12px 44px 12px 18px;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 50px;
+        color: var(--text-primary);
+        outline: none;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      #sort option {
+        background: #1a1c2e;
+        color: var(--text-primary);
+      }
+
+      #sort:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+      }
+
+      .results-count {
+        margin-left: auto;
+        font-size: 13px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+
+      /* ── Loading Skeleton ── */
+      #loading {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+        padding: 0 20px 40px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .skeleton {
+        background: var(--bg-card);
+        border-radius: var(--radius);
+        height: 280px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        position: relative;
+      }
+
+      .skeleton::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+        animation: shimmer 1.6s infinite;
+      }
+
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+
+      /* ── Catalog Grid ── */
       #Catalog {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
         gap: 20px;
-        padding: 20px;
+        padding: 0 20px 60px;
+        max-width: 1200px;
+        margin: 0 auto;
       }
 
+      /* ── Cards ── */
       .card {
-        background-color: aqua;
-        padding: 15px;
-        border-radius: 10px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
         text-align: center;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: box-shadow 0.3s ease;
         cursor: pointer;
+        backdrop-filter: blur(12px);
+        transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+        animation: fadeInUp 0.4s ease both;
+        position: relative;
+        overflow: hidden;
       }
+
+      .card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--accent-2));
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(108, 99, 255, 0.3);
+        border-color: rgba(108, 99, 255, 0.4);
+        background: var(--bg-card-hover);
+      }
+
+      .card:hover::before {
+        opacity: 1;
+      }
+
+      .card:active {
+        transform: translateY(-2px);
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
       .card img {
-        width: 120px;
-        border-radius: 5px;
+        width: 110px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s;
+      }
+
+      .card:hover img {
+        transform: scale(1.05);
+      }
+
+      .card h3 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
         margin-bottom: 10px;
       }
-      .card:hover {
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+
+      .card .info-row {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin: 4px 0;
       }
-      label,
-      select {
-        font-size: 16px;
-        margin: 20px;
-        cursor: pointer;
+
+      .card .info-row span.label {
+        color: var(--accent-2);
+        font-weight: 500;
       }
-      #search {
-        padding: 8px;
-        font-size: 16px;
-        width: 200px;
-        margin: 20px;
+
+      .card .continent-badge {
+        display: inline-block;
+        margin-top: 12px;
+        padding: 3px 12px;
+        border-radius: 50px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        background: rgba(108, 99, 255, 0.15);
+        color: var(--accent);
+        border: 1px solid rgba(108, 99, 255, 0.3);
       }
-      #status {
+
+      /* ── Empty State ── */
+      .empty-state {
+        grid-column: 1 / -1;
         text-align: center;
-        font-size: 18px;
-        margin: 10px;
-        color: darkred;
+        padding: 80px 20px;
+        color: var(--text-secondary);
       }
-      #status span {
-        font-weight: bold;
-        margin: 0 10px;
+
+      .empty-state svg {
+        opacity: 0.3;
+        margin-bottom: 16px;
+      }
+
+      .empty-state p {
+        font-size: 1.1rem;
+      }
+
+      /* ── Footer ── */
+      footer {
+        text-align: center;
+        padding: 20px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        border-top: 1px solid var(--border);
+      }
+
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 600px) {
+        .controls { flex-direction: column; align-items: stretch; }
+        .search-wrapper { max-width: 100%; }
+        .results-count { margin-left: 0; text-align: right; }
       }
     </style>
   </head>
   <body>
-    <h1>World Country Catalog</h1>
+
+    <header>
+      <div class="badge">🌍 Live Data</div>
+      <h1>World Country Catalog</h1>
+      <p class="subtitle">Explore countries, capitals, languages & more</p>
+    </header>
+
     <div id="status"></div>
 
-    <label for="search">SEARCH FOR COUNTRIES BY NAME :</label>
+    <div class="controls">
+      <div class="search-wrapper">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" id="search" placeholder="Search countries..." autocomplete="off" />
+      </div>
 
-    <input type="text" id="search" placeholder="Search countries..." />
+      <div class="select-wrapper">
+        <select name="continent" id="sort">
+          <option value="All">🌐 All Continents</option>
+          <option value="Africa">🌍 Africa</option>
+          <option value="Europe">🌍 Europe</option>
+          <option value="Asia">🌏 Asia</option>
+          <option value="North America">🌎 North America</option>
+          <option value="South America">🌎 South America</option>
+          <option value="Oceania">🌊 Oceania</option>
+        </select>
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
 
-    <label for="sort">FILTER BY CONTINENT : </label>
-    <select name="continent" id="sort">
-      <option value="All">All</option>
-      <option value="Africa">Africa</option>
-      <option value="Europe">Europe</option>
-      <option value="Asia">Asia</option>
-      <option value="North America">North America</option>
-      <option value="South America">South America</option>
-      <option value="Oceania">Oceania</option>
-    </select>
+      <span class="results-count" id="resultsCount"></span>
+    </div>
+
+    <!-- Loading skeletons -->
+    <div id="loading">
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+      <div class="skeleton"></div>
+    </div>
+
     <div id="Catalog"></div>
+
+    <footer>
+      Built with ❤️ using the <a href="https://countries-api-hsak.onrender.com/api/countries" target="_blank">Countries API</a>
+    </footer>
+
     <script src="catalogue.js"></script>
   </body>
 </html>
